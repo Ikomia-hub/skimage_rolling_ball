@@ -184,7 +184,7 @@ class ScikitRollingBallProcessFactory(dataprocess.CProcessFactory):
         self.info.version = "1.0.0"
         self.info.authors = "Sternberg, Stanley R."
         self.info.article = "Biomedical image processing."
-        self.info.journal = " Computer Volume 16 : 22-34"
+        self.info.journal = " Computer 1: 22-34"
         self.info.year = 1983
         self.info.license = "MIT License"
         # URL of documentation
