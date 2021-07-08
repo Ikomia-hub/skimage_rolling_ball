@@ -183,8 +183,8 @@ class ScikitRollingBallProcessFactory(dataprocess.CProcessFactory):
         self.info.path = "Plugins/Python/Background"
         self.info.version = "1.0.0"
         self.info.authors = "Sternberg, Stanley R."
-        self.info.article = "Biomedical image processing. Computer 1 : 22-34"
-        self.info.journal = "https://ieeexplore.ieee.org/document/1654163"
+        self.info.article = "Biomedical image processing."
+        self.info.journal = " Computer Volume 16 : 22-34"
         self.info.year = 1983
         self.info.license = "MIT License"
         # URL of documentation
