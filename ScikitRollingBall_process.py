@@ -24,6 +24,7 @@ from skimage import (
     data, restoration, util
 )
 
+
 # --------------------
 # - Class to handle the process parameters
 # - Inherits PyCore.CProtocolTaskParam from Ikomia API
@@ -32,28 +33,29 @@ class ScikitRollingBallParam(core.CProtocolTaskParam):
 
     def __init__(self):
         core.CProtocolTaskParam.__init__(self)
-        self.background_color = "Dark"
-        self.radius = 50
+        self.combo_model = "Dark"
+        self.radius = 10
         self.kernel_choice = "ball_kernel"
-        self.kernel_x = 100
-        self.kernel_y = 100
+        self.kernel_x = 10
+        self.kernel_y = 10
 
-    def setParamMap(self, param_map):
-        self.background_color = param_map["background_color"]
-        self.radius = int(param_map["radius"])
-        self.kernel_choice = param_map["kernel_choice"]
-        self.kernel_x = int(param_map["kernel_x"])
-        self.kernel_y = int(param_map["kernel_y"])
+    def setParamMap(self, paramMap):
+        self.combo_model = paramMap["combo_model"]
+        self.radius = int(paramMap["radius"])
+        self.kernel_choice = paramMap["kernel_choice"]
+        self.kernel_x = int(paramMap["kernel_x"])
+        self.kernel_y = int(paramMap["kernel_y"])
 
     def getParamMap(self):
         # Send parameters values to Ikomia application
         # Create the specific dict structure (string container)
-        param_map = core.ParamMap()
-        param_map["background_color"] = self.background_color
-        param_map["radius"] = str(self.radius)
-        param_map["kernel_choice"] = self.kernel_choice
-        param_map["kernel_x"] = self.kernel_x
-        param_map["kernel_y"] = self.kernel_y
+        paramMap = core.ParamMap()
+        paramMap["combo_model"] = self.combo_model
+        paramMap["radius"] = str(self.radius)
+        paramMap["kernel_choice"] = self.kernel_choice
+        paramMap["kernel_x"] = str(self.kernel_x)
+        paramMap["kernel_y"] = str(self.kernel_y)
+
         return paramMap
 
 
@@ -100,20 +102,21 @@ class ScikitRollingBallProcess(core.CProtocolTask):
 
         # Get parameters
         param = self.getParam()
-
+        print(param.combo_model)
         print("Start Rolling ball...")
-        if param.background_color == "Dark":
+        if param.combo_model == "Dark":
             image = input_img.getImage()
             if param.kernel_choice == "ball_kernel":
                 if len(image.shape) < 3:
                     background = restoration.rolling_ball(image, radius=param.radius)
                 else:
-                    raise ValueError("the choice of kernel_ball is not suitable for a color image, choose ellipsoid_kernel")
+                    raise ValueError(
+                        "the choice of kernel_ball is not suitable for a color image, choose ellipsoid_kernel")
             else:
-                normalized_radius = param.radius/255
+                normalized_radius = param.radius / 255
                 # testing the color of the image
                 if len(image.shape) < 3:
-                    kernel = restoration.ellipsoid_kernel((param.kernel_x, param.kernel_y), normalized_radius*2)
+                    kernel = restoration.ellipsoid_kernel((param.kernel_x, param.kernel_y), normalized_radius * 2)
                 else:
                     kernel = restoration.ellipsoid_kernel((1, param.kernel_x, param.kernel_y), normalized_radius)
 

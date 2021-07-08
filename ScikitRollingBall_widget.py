@@ -38,24 +38,28 @@ class ScikitRollingBallWidget(core.CProtocolTaskWidget):
 
         # Create layout : QGridLayout by default
         self.grid_layout = QGridLayout()
+        # PyQt -> Qt wrapping
+        layout_ptr = utils.PyQtToQt(self.grid_layout)
 
+        # Set widget layout
+        self.setLayout(layout_ptr)
         # Creation widget background
         self.label_back = QLabel("Background color choice:")
         self.combo_model = QComboBox()
         self.combo_model.addItem("Dark")
         self.combo_model.addItem("Light")
-        self.combo_model.setCurrentText(self.parameters.background_color)
         self.grid_layout.addWidget(self.label_back, 1, 0)
         self.grid_layout.addWidget(self.combo_model, 1, 1)
+        self.combo_model.setCurrentText(self.parameters.combo_model)
 
         # Creation widget kernel_choice
         self.label_kernel_choice = QLabel("kernel-choice:")
         self.kernel_choice = QComboBox()
         self.kernel_choice.addItem("ball_kernel")
         self.kernel_choice.addItem("ellipsoid_kernel")
-        self.kernel_choice.setCurrentText("ball-kernel")
         self.grid_layout.addWidget(self.label_kernel_choice, 2, 0)
         self.grid_layout.addWidget(self.kernel_choice, 2, 1)
+        self.kernel_choice.setCurrentText(self.parameters.kernel_choice)
 
         # link between widget and MethodChange
         self.kernel_choice.currentTextChanged.connect(self.on_method_change)
@@ -65,20 +69,20 @@ class ScikitRollingBallWidget(core.CProtocolTaskWidget):
         self.radius = QSpinBox()
         self.radius.setMinimum(0)
         self.radius.setMaximum(200)
-        self.radius.setValue(10)
+        self.radius.setValue(self.parameters.radius)
 
         # Creation widget kernel_ellipsoid x and y
         self.label_kernel_x = QLabel("kernel_x:")
         self.kernel_x = QSpinBox()
         self.kernel_x.setMinimum(0)
         self.kernel_x.setMaximum(255)
-        self.kernel_x.setValue(10)
+        self.kernel_x.setValue(self.parameters.kernel_x)
 
         self.label_kernel_y = QLabel("kernel_y:")
         self.kernel_y = QSpinBox()
         self.kernel_y.setMinimum(0)
         self.kernel_y.setMaximum(255)
-        self.kernel_y.setValue(10)
+        self.kernel_y.setValue(self.parameters.kernel_y)
 
         # applying the widget on the interface
         self.grid_layout.addWidget(self.label_kernel_x, 3, 0)
@@ -90,17 +94,7 @@ class ScikitRollingBallWidget(core.CProtocolTaskWidget):
         self.grid_layout.addWidget(self.label_radius, 3, 0)
         self.grid_layout.addWidget(self.radius, 3, 1)
 
-        # current case
-        self.label_kernel_y.hide()
-        self.label_kernel_x.hide()
-        self.kernel_x.hide()
-        self.kernel_y.hide()
-
-        # PyQt -> Qt wrapping
-        layout_ptr = utils.PyQtToQt(self.grid_layout)
-
-        # Set widget layout
-        self.setLayout(layout_ptr)
+        self.on_method_change()
 
     def on_method_change(self):
 
@@ -124,7 +118,7 @@ class ScikitRollingBallWidget(core.CProtocolTaskWidget):
     def onApply(self):
         # Apply button clicked slot
         # Get parameters from widget
-        self.parameters.background_color = self.combo_model.currentText()
+        self.parameters.combo_model = self.combo_model.currentText()
         self.parameters.kernel_choice = self.kernel_choice.currentText()
         self.parameters.radius = self.radius.value()
         self.parameters.kernel_x = self.kernel_x.value()
