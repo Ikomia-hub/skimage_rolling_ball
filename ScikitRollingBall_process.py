@@ -191,7 +191,7 @@ class ScikitRollingBallProcessFactory(dataprocess.CProcessFactory):
         self.info.documentationLink = "https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_rolling_ball.html"
         self.info.iconPath = "icons/scikit.png"
         # Code source repository
-        self.info.repository = ""
+        self.info.repository = "https://github.com/Ikomia-dev/ScikitRollingBall"
         # Keywords used for search
         self.info.keywords = "scikit-image,rolling,ball,background,restoration"
 
