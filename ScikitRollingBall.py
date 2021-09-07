@@ -17,8 +17,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from ikomia import dataprocess
-import ScikitRollingBall_process as processMod
-import ScikitRollingBall_widget as widgetMod
 
 
 # --------------------
@@ -31,9 +29,11 @@ class ScikitRollingBall(dataprocess.CPluginProcessInterface):
         dataprocess.CPluginProcessInterface.__init__(self)
 
     def getProcessFactory(self):
+        from ScikitRollingBall.ScikitRollingBall_process import ScikitRollingBallProcessFactory
         # Instantiate process object
-        return processMod.ScikitRollingBallProcessFactory()
+        return ScikitRollingBallProcessFactory()
 
     def getWidgetFactory(self):
+        from ScikitRollingBall.ScikitRollingBall_widget import ScikitRollingBallWidgetFactory
         # Instantiate associated widget object
-        return widgetMod.ScikitRollingBallWidgetFactory()
+        return ScikitRollingBallWidgetFactory()

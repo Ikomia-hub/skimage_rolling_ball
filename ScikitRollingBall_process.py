@@ -18,8 +18,6 @@
 
 from ikomia import core, dataprocess
 import copy
-# Your imports below
-
 from skimage import (
     data, restoration, util
 )
@@ -29,49 +27,48 @@ from skimage import (
 # - Class to handle the process parameters
 # - Inherits PyCore.CProtocolTaskParam from Ikomia API
 # --------------------
-class ScikitRollingBallParam(core.CProtocolTaskParam):
+class ScikitRollingBallParam(core.CWorkflowTaskParam):
 
     def __init__(self):
-        core.CProtocolTaskParam.__init__(self)
+        core.CWorkflowTaskParam.__init__(self)
         self.combo_model = "Dark"
         self.radius = 10
         self.kernel_choice = "ball_kernel"
         self.kernel_x = 10
         self.kernel_y = 10
 
-    def setParamMap(self, paramMap):
-        self.combo_model = paramMap["combo_model"]
-        self.radius = int(paramMap["radius"])
-        self.kernel_choice = paramMap["kernel_choice"]
-        self.kernel_x = int(paramMap["kernel_x"])
-        self.kernel_y = int(paramMap["kernel_y"])
+    def setParamMap(self, param_map):
+        self.combo_model = param_map["combo_model"]
+        self.radius = int(param_map["radius"])
+        self.kernel_choice = param_map["kernel_choice"]
+        self.kernel_x = int(param_map["kernel_x"])
+        self.kernel_y = int(param_map["kernel_y"])
 
     def getParamMap(self):
         # Send parameters values to Ikomia application
         # Create the specific dict structure (string container)
-        paramMap = core.ParamMap()
-        paramMap["combo_model"] = self.combo_model
-        paramMap["radius"] = str(self.radius)
-        paramMap["kernel_choice"] = self.kernel_choice
-        paramMap["kernel_x"] = str(self.kernel_x)
-        paramMap["kernel_y"] = str(self.kernel_y)
-
-        return paramMap
+        param_map = core.ParamMap()
+        param_map["combo_model"] = self.combo_model
+        param_map["radius"] = str(self.radius)
+        param_map["kernel_choice"] = self.kernel_choice
+        param_map["kernel_x"] = str(self.kernel_x)
+        param_map["kernel_y"] = str(self.kernel_y)
+        return param_map
 
 
 # --------------------
 # - Class which implements the process
 # - Inherits PyCore.CProtocolTask or derived from Ikomia API
 # --------------------
-class ScikitRollingBallProcess(core.CProtocolTask):
+class ScikitRollingBallProcess(core.CWorkflowTask):
 
     def __init__(self, name, param):
-        core.CProtocolTask.__init__(self, name)
+        core.CWorkflowTask.__init__(self, name)
 
         # Add input/output of the process here
-        self.addInput(dataprocess.CImageProcessIO())
-        self.addOutput(dataprocess.CImageProcessIO())
-        self.addOutput(dataprocess.CImageProcessIO())
+        self.addInput(dataprocess.CImageIO())
+        self.addOutput(dataprocess.CImageIO())
+        self.addOutput(dataprocess.CImageIO())
 
         # Create parameters class
         if param is None:
@@ -161,10 +158,10 @@ class ScikitRollingBallProcess(core.CProtocolTask):
 # - Factory class to build process object
 # - Inherits PyDataProcess.CProcessFactory from Ikomia API
 # --------------------
-class ScikitRollingBallProcessFactory(dataprocess.CProcessFactory):
+class ScikitRollingBallProcessFactory(dataprocess.CTaskFactory):
 
     def __init__(self):
-        dataprocess.CProcessFactory.__init__(self)
+        dataprocess.CTaskFactory.__init__(self)
         # Set process information as string here
         self.info.name = "ScikitRollingBall"
         self.info.shortDescription = "The rolling-ball algorithm estimates the background intensity of " \

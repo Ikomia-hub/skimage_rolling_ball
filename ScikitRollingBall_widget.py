@@ -17,7 +17,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from ikomia import utils, core, dataprocess
-import ScikitRollingBall_process as processMod
+from ikomia.utils import qtconversion
+from ScikitRollingBall.ScikitRollingBall_process import ScikitRollingBallParam
 # PyQt GUI framework
 from PyQt5.QtWidgets import *
 
@@ -26,20 +27,20 @@ from PyQt5.QtWidgets import *
 # - Class which implements widget associated with the process
 # - Inherits PyCore.CProtocolTaskWidget from Ikomia API
 # --------------------
-class ScikitRollingBallWidget(core.CProtocolTaskWidget):
+class ScikitRollingBallWidget(core.CWorkflowTaskWidget):
 
     def __init__(self, param, parent):
-        core.CProtocolTaskWidget.__init__(self, parent)
+        core.CWorkflowTaskWidget.__init__(self, parent)
 
         if param is None:
-            self.parameters = processMod.ScikitRollingBallParam()
+            self.parameters = ScikitRollingBallParam()
         else:
             self.parameters = param
 
         # Create layout : QGridLayout by default
         self.grid_layout = QGridLayout()
         # PyQt -> Qt wrapping
-        layout_ptr = utils.PyQtToQt(self.grid_layout)
+        layout_ptr = qtconversion.PyQtToQt(self.grid_layout)
 
         # Set widget layout
         self.setLayout(layout_ptr)
