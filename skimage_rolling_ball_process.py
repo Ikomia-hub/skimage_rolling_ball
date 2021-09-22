@@ -27,7 +27,7 @@ from skimage import (
 # - Class to handle the process parameters
 # - Inherits PyCore.CProtocolTaskParam from Ikomia API
 # --------------------
-class ScikitRollingBallParam(core.CWorkflowTaskParam):
+class RollingBallParam(core.CWorkflowTaskParam):
 
     def __init__(self):
         core.CWorkflowTaskParam.__init__(self)
@@ -60,7 +60,7 @@ class ScikitRollingBallParam(core.CWorkflowTaskParam):
 # - Class which implements the process
 # - Inherits PyCore.CProtocolTask or derived from Ikomia API
 # --------------------
-class ScikitRollingBallProcess(core.CWorkflowTask):
+class RollingBall(core.CWorkflowTask):
 
     def __init__(self, name, param):
         core.CWorkflowTask.__init__(self, name)
@@ -72,7 +72,7 @@ class ScikitRollingBallProcess(core.CWorkflowTask):
 
         # Create parameters class
         if param is None:
-            self.setParam(ScikitRollingBallParam())
+            self.setParam(RollingBallParam())
         else:
             self.setParam(copy.deepcopy(param))
 
@@ -158,12 +158,12 @@ class ScikitRollingBallProcess(core.CWorkflowTask):
 # - Factory class to build process object
 # - Inherits PyDataProcess.CProcessFactory from Ikomia API
 # --------------------
-class ScikitRollingBallProcessFactory(dataprocess.CTaskFactory):
+class RollingBallFactory(dataprocess.CTaskFactory):
 
     def __init__(self):
         dataprocess.CTaskFactory.__init__(self)
         # Set process information as string here
-        self.info.name = "ScikitRollingBall"
+        self.info.name = "skimage_rolling_ball"
         self.info.shortDescription = "The rolling-ball algorithm estimates the background intensity of " \
                                      "a grayscale image in case of uneven exposure"
         self.info.description = "The algorithm works as a filter and is quite intuitive. We think of the image as a " \
@@ -194,4 +194,4 @@ class ScikitRollingBallProcessFactory(dataprocess.CTaskFactory):
 
     def create(self, param=None):
         # Create process object
-        return ScikitRollingBallProcess(self.info.name, param)
+        return RollingBall(self.info.name, param)

@@ -23,17 +23,17 @@ from ikomia import dataprocess
 # - Interface class to integrate the process with Ikomia application
 # - Inherits PyDataProcess.CPluginProcessInterface from Ikomia API
 # --------------------
-class ScikitRollingBall(dataprocess.CPluginProcessInterface):
+class IkomiaPlugin(dataprocess.CPluginProcessInterface):
 
     def __init__(self):
         dataprocess.CPluginProcessInterface.__init__(self)
 
     def getProcessFactory(self):
-        from ScikitRollingBall.ScikitRollingBall_process import ScikitRollingBallProcessFactory
+        from skimage_rolling_ball.skimage_rolling_ball_process import RollingBallFactory
         # Instantiate process object
-        return ScikitRollingBallProcessFactory()
+        return RollingBallFactory()
 
     def getWidgetFactory(self):
-        from ScikitRollingBall.ScikitRollingBall_widget import ScikitRollingBallWidgetFactory
+        from skimage_rolling_ball.skimage_rolling_ball_widget import RollingBallWidgetFactory
         # Instantiate associated widget object
-        return ScikitRollingBallWidgetFactory()
+        return RollingBallWidgetFactory()
