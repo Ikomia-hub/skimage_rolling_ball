@@ -43,7 +43,7 @@ class RollingBallWidget(core.CWorkflowTaskWidget):
         layout_ptr = qtconversion.PyQtToQt(self.grid_layout)
 
         # Set widget layout
-        self.setLayout(layout_ptr)
+        self.set_layout(layout_ptr)
         # Creation widget background
         self.label_back = QLabel("Background color choice:")
         self.combo_model = QComboBox()
@@ -116,7 +116,7 @@ class RollingBallWidget(core.CWorkflowTaskWidget):
             self.label_radius.hide()
             self.radius.hide()
 
-    def onApply(self):
+    def on_apply(self):
         # Apply button clicked slot
         # Get parameters from widget
         self.parameters.combo_model = self.combo_model.currentText()
@@ -126,7 +126,7 @@ class RollingBallWidget(core.CWorkflowTaskWidget):
         self.parameters.kernel_y = self.kernel_y.value()
 
         # Send signal to launch the process
-        self.emitApply(self.parameters)
+        self.emit_apply(self.parameters)
 
 
 # --------------------

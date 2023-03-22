@@ -28,12 +28,12 @@ class IkomiaPlugin(dataprocess.CPluginProcessInterface):
     def __init__(self):
         dataprocess.CPluginProcessInterface.__init__(self)
 
-    def getProcessFactory(self):
+    def get_process_factory(self):
         from skimage_rolling_ball.skimage_rolling_ball_process import RollingBallFactory
         # Instantiate process object
         return RollingBallFactory()
 
-    def getWidgetFactory(self):
+    def get_widget_factory(self):
         from skimage_rolling_ball.skimage_rolling_ball_widget import RollingBallWidgetFactory
         # Instantiate associated widget object
         return RollingBallWidgetFactory()

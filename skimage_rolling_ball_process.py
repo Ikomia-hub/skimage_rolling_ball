@@ -37,72 +37,69 @@ class RollingBallParam(core.CWorkflowTaskParam):
         self.kernel_x = 10
         self.kernel_y = 10
 
-    def setParamMap(self, param_map):
-        self.combo_model = param_map["combo_model"]
-        self.radius = int(param_map["radius"])
-        self.kernel_choice = param_map["kernel_choice"]
-        self.kernel_x = int(param_map["kernel_x"])
-        self.kernel_y = int(param_map["kernel_y"])
+    def set_values(self, params):
+        self.combo_model = params["combo_model"]
+        self.radius = int(params["radius"])
+        self.kernel_choice = params["kernel_choice"]
+        self.kernel_x = int(params["kernel_x"])
+        self.kernel_y = int(params["kernel_y"])
 
-    def getParamMap(self):
+    def get_values(self):
         # Send parameters values to Ikomia application
         # Create the specific dict structure (string container)
-        param_map = core.ParamMap()
-        param_map["combo_model"] = self.combo_model
-        param_map["radius"] = str(self.radius)
-        param_map["kernel_choice"] = self.kernel_choice
-        param_map["kernel_x"] = str(self.kernel_x)
-        param_map["kernel_y"] = str(self.kernel_y)
-        return param_map
+        params = {"combo_model": self.combo_model,
+                  "radius": str(self.radius),
+                  "kernel_choice": self.kernel_choice,
+                  "kernel_x": str(self.kernel_x),
+                  "kernel_y": str(self.kernel_y)}
+        return params
 
 
 # --------------------
 # - Class which implements the process
 # - Inherits PyCore.CProtocolTask or derived from Ikomia API
 # --------------------
-class RollingBall(core.CWorkflowTask):
+class RollingBall(dataprocess.C2dImageTask):
 
     def __init__(self, name, param):
-        core.CWorkflowTask.__init__(self, name)
+        dataprocess.C2dImageTask.__init__(self, name)
 
         # Add input/output of the process here
-        self.addInput(dataprocess.CImageIO())
-        self.addOutput(dataprocess.CImageIO())
-        self.addOutput(dataprocess.CImageIO())
+        self.add_output(dataprocess.CImageIO())
 
         # Create parameters class
         if param is None:
-            self.setParam(RollingBallParam())
+            self.set_param_object(RollingBallParam())
         else:
-            self.setParam(copy.deepcopy(param))
+            self.set_param_object(copy.deepcopy(param))
 
-    def getProgressSteps(self):
+    def get_progress_steps(self):
         # Function returning the number of progress steps for this process
         # This is handled by the main progress bar of Ikomia application
         return 3
 
     def run(self):
         # Core function of your process
-        # Call beginTaskRun for initialization
-        self.beginTaskRun()
+        # Call begin_task_run for initialization
+        self.begin_task_run()
 
         # Get input
-        input_img = self.getInput(0)
+        input_img = self.get_input(0)
 
         # Verification if the input is empty
-        if not input_img.isDataAvailable():
+        if not input_img.is_data_available():
             raise ValueError("your input is empty, restart the task")
 
         # Get output
-        output_img = self.getOutput(0)
-        output_bck = self.getOutput(1)
+        output_img = self.get_output(0)
+        output_bck = self.get_output(1)
 
         # Get parameters
-        param = self.getParam()
+        param = self.get_param_object()
         print(param.combo_model)
         print("Start Rolling ball...")
         if param.combo_model == "Dark":
-            image = input_img.getImage()
+            image = input_img.get_image()
             if param.kernel_choice == "ball_kernel":
                 if len(image.shape) < 3:
                     background = restoration.rolling_ball(image, radius=param.radius)
@@ -113,45 +110,48 @@ class RollingBall(core.CWorkflowTask):
                 normalized_radius = param.radius / 255
                 # testing the color of the image
                 if len(image.shape) < 3:
-                    kernel = restoration.ellipsoid_kernel((param.kernel_x, param.kernel_y), normalized_radius * 2)
+                    kernel = restoration.ellipsoid_kernel((param.kernel_x, param.kernel_y),
+                                                          normalized_radius * 2)
                 else:
-                    kernel = restoration.ellipsoid_kernel((1, param.kernel_x, param.kernel_y), normalized_radius)
+                    kernel = restoration.ellipsoid_kernel((1, param.kernel_x, param.kernel_y),
+                                                          normalized_radius)
 
                 background = restoration.rolling_ball(image, kernel=kernel)
 
             # Step progress bar:
-            self.emitStepProgress()
+            self.emit_step_progress()
             filtered_image = image - background
             # Step progress bar:
-            self.emitStepProgress()
-            output_img.setImage(filtered_image)
-            output_bck.setImage(background)
+            self.emit_step_progress()
+            output_img.set_image(filtered_image)
+            output_bck.set_image(background)
         else:
-            image = input_img.getImage()
+            image = input_img.get_image()
             image_inverted = util.invert(image)
 
             if param.kernel_choice == "ball_kernel":
                 background_inverted = restoration.rolling_ball(image_inverted, radius=param.radius)
             else:
                 normalized_radius = param.radius / 255
-                kernel = restoration.ellipsoid_kernel((param.kernel_x, param.kernel_y), normalized_radius * 2)
+                kernel = restoration.ellipsoid_kernel((param.kernel_x, param.kernel_y),
+                                                      normalized_radius * 2)
                 background_inverted = restoration.rolling_ball(image_inverted, kernel=kernel)
 
             # Step progress bar:
-            self.emitStepProgress()
+            self.emit_step_progress()
             filtered_image_inverted = image_inverted - background_inverted
             filtered_image = util.invert(filtered_image_inverted)
             background = util.invert(background_inverted)
             # Step progress bar:
-            self.emitStepProgress()
-            output_img.setImage(filtered_image)
-            output_bck.setImage(background)
+            self.emit_step_progress()
+            output_img.set_image(filtered_image)
+            output_bck.set_image(background)
 
         # Step progress bar:
-        self.emitStepProgress()
+        self.emit_step_progress()
 
-        # Call endTaskRun to finalize process
-        self.endTaskRun()
+        # Call end_task_run to finalize process
+        self.end_task_run()
 
 
 # --------------------
@@ -164,7 +164,7 @@ class RollingBallFactory(dataprocess.CTaskFactory):
         dataprocess.CTaskFactory.__init__(self)
         # Set process information as string here
         self.info.name = "skimage_rolling_ball"
-        self.info.shortDescription = "The rolling-ball algorithm estimates the background intensity of " \
+        self.info.short_description = "The rolling-ball algorithm estimates the background intensity of " \
                                      "a grayscale image in case of uneven exposure"
         self.info.description = "The algorithm works as a filter and is quite intuitive. We think of the image as a " \
                                 "surface that has unit-sized blocks stacked on top of each other in place of " \
@@ -178,15 +178,15 @@ class RollingBallFactory(dataprocess.CTaskFactory):
                                 "images, use the ellipsoid_kernel method."
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Background"
-        self.info.version = "1.0.0"
+        self.info.version = "1.1.0"
         self.info.authors = "Sternberg, Stanley R."
         self.info.article = "Biomedical image processing."
         self.info.journal = " Computer 1: 22-34"
         self.info.year = 1983
         self.info.license = "MIT License"
         # URL of documentation
-        self.info.documentationLink = "https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_rolling_ball.html"
-        self.info.iconPath = "icons/scikit.png"
+        self.info.documentation_link = "https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_rolling_ball.html"
+        self.info.icon_path = "icons/scikit.png"
         # Code source repository
         self.info.repository = "https://github.com/Ikomia-dev/ScikitRollingBall"
         # Keywords used for search
