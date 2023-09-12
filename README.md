@@ -19,10 +19,10 @@
     </a> 
 </p>
 
-The algorithm works as a filter and is quite intuitive. We think of the image as a surface that has unit-sized blocks stacked on top of each other in place of each pixel. The number of blocks, and hence surface height, is determined by the intensity of the pixel. To get the intensity of the background at a desired (pixel) position, we imagine submerging a ball under the surface at the desired position. Once it is completely covered by the blocks, the apex of the ball determines the intensity of the background at that position. We can then roll this ball around below the surface to get the background values for the entire image. This algorithm is recommended for grayscale images. However, if you want to apply it to color images, use the ellipsoid_kernel method.
+Use rolling-ball algorithm for estimating background intensity. 
 
-[Insert illustrative image here. Image must be accessible publicly, in algorithm Github repository for example.
-<img src="images/illustration.png"  alt="Illustrative image" width="30%" height="30%">]
+
+![rolling ball](https://raw.githubusercontent.com/Ikomia-hub/skimage_rolling_ball/feat/new_readme/sample%20images/output.jpg)
 
 ## :rocket: Use with Ikomia API
 
@@ -35,12 +35,9 @@ pip install ikomia
 ```
 
 #### 2. Create your workflow
-
-[Change the sample image URL to fit algorithm purpose]
-
 ```python
-import ikomia
 from ikomia.dataprocess.workflow import Workflow
+from ikomia.utils.displayIO import display
 
 # Init your workflow
 wf = Workflow()
@@ -49,7 +46,9 @@ wf = Workflow()
 algo = wf.add_task(name="skimage_rolling_ball", auto_connect=True)
 
 # Run on your image  
-wf.run_on(url="example_image.png")
+wf.run_on(url="https://raw.githubusercontent.com/Ikomia-hub/skimage_rolling_ball/main/sample%20images/coins.png")
+
+display(algo.get_output(0).get_image())
 ```
 
 ## :sunny: Use with Ikomia Studio
@@ -62,13 +61,17 @@ Ikomia Studio offers a friendly UI with the same features as the API.
 
 ## :pencil: Set algorithm parameters
 
-[Explain each algorithm parameters]
+- **combo_model** (str) default 'Dark': Background model choice 'Light' or 'Dark'
+- **radius** (int) - default '10': Radius of a ball shaped kernel to be rolled/translated in the image.
+- **kernel_choice** (str) - default 'ball_kernel': Kernel type. Other option: 'ellipsoid_kernel'
+- **kernel_x** (int) - default '10'
+- **kernel_y** (int) - default '10'
 
-[Change the sample image URL to fit algorithm purpose]
+**Parameters** should be in **strings format**  when added to the dictionary.
 
 ```python
-import ikomia
 from ikomia.dataprocess.workflow import Workflow
+from ikomia.utils.displayIO import display
 
 # Init your workflow
 wf = Workflow()
@@ -76,15 +79,19 @@ wf = Workflow()
 # Add algorithm
 algo = wf.add_task(name="skimage_rolling_ball", auto_connect=True)
 
+
 algo.set_parameters({
-    "param1": "value1",
-    "param2": "value2",
-    ...
+    "combo_model": "Light",
+    "radius": "20",
+    "kernel_choice": "ellipsoid_kernel",
+    "kernel_x": "20",
+    "kernel_y": "20",
 })
 
 # Run on your image  
-wf.run_on(url="example_image.png")
+wf.run_on(url="https://raw.githubusercontent.com/Ikomia-hub/skimage_rolling_ball/main/sample%20images/coins.png")
 
+display(algo.get_output(0).get_image())
 ```
 
 ## :mag: Explore algorithm outputs
@@ -102,10 +109,10 @@ wf = Workflow()
 algo = wf.add_task(name="skimage_rolling_ball", auto_connect=True)
 
 # Run on your image  
-wf.run_on(url="example_image.png")
+wf.run_on(url="https://raw.githubusercontent.com/Ikomia-hub/skimage_rolling_ball/main/sample%20images/coins.png")
 
 # Iterate over outputs
-for output in algo.get_outputs()
+for output in algo.get_outputs():
     # Print information
     print(output)
     # Export it to JSON
@@ -114,4 +121,7 @@ for output in algo.get_outputs()
 
 ## :fast_forward: Advanced usage 
 
-[optional]
+The algorithm works as a filter and is quite intuitive. We think of the image as a surface that has unit-sized blocks stacked on top of each other in place of each pixel. 
+The number of blocks, and hence surface height, is determined by the intensity of the pixel. 
+To get the intensity of the background at a desired (pixel) position, we imagine submerging a ball under the surface at the desired position. 
+Once it is completely covered by the blocks, the apex of the ball determines the intensity of the background at that position. We can then roll this ball around below the surface to get the background values for the entire image. This algorithm is recommended for grayscale images. However, if you want to apply it to color images, use the ellipsoid_kernel method.
