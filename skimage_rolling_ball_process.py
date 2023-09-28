@@ -166,29 +166,20 @@ class RollingBallFactory(dataprocess.CTaskFactory):
         self.info.name = "skimage_rolling_ball"
         self.info.short_description = "The rolling-ball algorithm estimates the background intensity of " \
                                      "a grayscale image in case of uneven exposure"
-        self.info.description = "The algorithm works as a filter and is quite intuitive. We think of the image as a " \
-                                "surface that has unit-sized blocks stacked on top of each other in place of " \
-                                "each pixel. The number of blocks, and hence surface height, is determined by the " \
-                                "intensity of the pixel. To get the intensity of the background at a desired (pixel) " \
-                                "position, we imagine submerging a ball under the surface at the desired position. " \
-                                "Once it is completely covered by the blocks, the apex of the ball determines the " \
-                                "intensity of the background at that position. We can then roll this ball around " \
-                                "below the surface to get the background values for the entire image. This algorithm " \
-                                "is recommended for grayscale images. However, if you want to apply it to color " \
-                                "images, use the ellipsoid_kernel method."
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Background"
         self.info.version = "1.1.0"
         self.info.authors = "Sternberg, Stanley R."
         self.info.article = "Biomedical image processing."
-        self.info.journal = " Computer 1: 22-34"
+        self.info.journal = "Computer 1: 22-34"
         self.info.year = 1983
         self.info.license = "MIT License"
         # URL of documentation
         self.info.documentation_link = "https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_rolling_ball.html"
         self.info.icon_path = "icons/scikit.png"
         # Code source repository
-        self.info.repository = "https://github.com/Ikomia-dev/ScikitRollingBall"
+        self.info.repository = "https://github.com/Ikomia-hub/skimage_rolling_ball"
+        self.info.original_repository = "https://github.com/scikit-image/scikit-image"
         # Keywords used for search
         self.info.keywords = "scikit-image,rolling,ball,background,restoration"
 
