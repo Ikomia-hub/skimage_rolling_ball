@@ -22,7 +22,7 @@
 Use rolling-ball algorithm for estimating background intensity. 
 
 
-![rolling ball](https://raw.githubusercontent.com/Ikomia-hub/skimage_rolling_ball/feat/new_readme/sample%20images/output.jpg)
+![rolling ball](https://raw.githubusercontent.com/Ikomia-hub/skimage_rolling_ball/main/sample%20images/output.jpg)
 
 ## :rocket: Use with Ikomia API
 
