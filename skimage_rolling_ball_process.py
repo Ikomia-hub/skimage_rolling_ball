@@ -182,6 +182,8 @@ class RollingBallFactory(dataprocess.CTaskFactory):
         self.info.original_repository = "https://github.com/scikit-image/scikit-image"
         # Keywords used for search
         self.info.keywords = "scikit-image,rolling,ball,background,restoration"
+        self.info.algo_type = core.AlgoType.OTHER
+        self.info.algo_tasks = "NONE"
 
     def create(self, param=None):
         # Create process object
