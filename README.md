@@ -54,9 +54,7 @@ display(algo.get_output(0).get_image())
 ## :sunny: Use with Ikomia Studio
 
 Ikomia Studio offers a friendly UI with the same features as the API.
-
 - If you haven't started using Ikomia Studio yet, download and install it from [this page](https://www.ikomia.ai/studio).
-
 - For additional guidance on getting started with Ikomia Studio, check out [this blog post](https://www.ikomia.ai/blog/how-to-get-started-with-ikomia-studio).
 
 ## :pencil: Set algorithm parameters
